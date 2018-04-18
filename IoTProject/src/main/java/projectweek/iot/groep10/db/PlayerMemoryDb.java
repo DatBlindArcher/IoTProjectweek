@@ -15,7 +15,7 @@ public class PlayerMemoryDb {
         comparator = new Comparator<Player>() {
             @Override
             public int compare(Player a, Player b) {
-                return (int)(a.getScore() - b.getScore());
+                return (int)(b.getScore() - a.getScore());
             }
         };
     }
@@ -25,12 +25,10 @@ public class PlayerMemoryDb {
         return players.get(counter);
     }
 
-    public void setPlayerName(int id, String name) {
-        players.get(id).setName(name);
-    }
-
-    public void setPlayerScore(int id, int score) {
-        players.get(id).setScore(score);
+    public Player setPlayer(Player player) {
+        players.get(player.getId()).setName(player.getName());
+        players.get(player.getId()).setScore(player.getScore());
+        return players.get(player.getId());
     }
 
     public List<Player> getLeaderBoard() {

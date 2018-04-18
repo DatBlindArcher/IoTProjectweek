@@ -1,10 +1,11 @@
 package projectweek.iot.groep10.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import projectweek.iot.groep10.domain.Player;
 import projectweek.iot.groep10.services.PlayerService;
+
+import java.util.List;
 
 @RestController
 public class RestPlayerController
@@ -12,10 +13,24 @@ public class RestPlayerController
     @Autowired
     private PlayerService service;
 
-    @GetMapping("/getplayer")
-    public Player getPlayer()
+    @GetMapping("/leaderboard")
+    public Player[] getLeaderboard()
     {
-        Player player = service.playerDb.createPlayer();
-        return player;
+        List<Player> players = service.playerDb.getLeaderBoard();
+        Player[] result = new Player[players.size()];
+        players.toArray(result);
+        return result;
+    }
+
+    @GetMapping("/createplayer")
+    public Player createPlayer()
+    {
+        return service.playerDb.createPlayer();
+    }
+
+    @PostMapping("/setplayer")
+    public Player setPlayer(@RequestBody Player player)
+    {
+        return service.playerDb.setPlayer(player);
     }
 }

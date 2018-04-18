@@ -5,6 +5,7 @@ public class Player {
     private String name;
     private double score;
 
+    public Player() { }
     public Player(int id) {
         this.id = id;
         this.name = "Player " + id;
