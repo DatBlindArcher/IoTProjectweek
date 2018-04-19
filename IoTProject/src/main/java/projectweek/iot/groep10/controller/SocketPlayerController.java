@@ -18,7 +18,7 @@ public class SocketPlayerController {
         this.service = service;
     }
 
-    @MessageMapping("/scores/{playerid}/")
+    @MessageMapping("/scores/{playerid}")
     @SendTo("/topic/scores/{playerid}")
     public Player setplayer(@DestinationVariable String playerid, Player player) {
         return player;
