@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Hello Spring Boot!</title>
+    <title>Scoreboard</title>
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-<body>
-<p>Hello Spring Boot!</p>
+<body class="p-3 mb-2 bg-warning text-dark">
+<div class="container">
+<h1 class="text-center">Scoreboard</h1>
+<table class="table table-bordered table-striped text-center">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="player : ${players}">
+        <td th:text="${player.getName()}"></td>
+        <td th:text="${player.getScore()}"></td>
+    </tr>
+
+    </tbody>
+</table>
+    <img class="center-block" src="/img/peingguy.png">
+</div>
 </body>
 </html>
