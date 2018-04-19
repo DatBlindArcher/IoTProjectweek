@@ -16,13 +16,13 @@ GPIO.setup(KNOP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LASER,GPIO.OUT)
 
 def stop():
-    print("stop")
+    print("[Stop]")
     global RUN
     RUN = False
     GPIO.cleanup()
 
 def endGame():
-    print("endGame")
+    print("[endGame]")
     global START
     global SCORE
     START = False
@@ -34,26 +34,31 @@ def endGame():
     response = requests.post('http://193.191.176.129:8080/setplayer', json = player)
     print(response.json())
     SCORE = 0
+    print("Waiting for input...", end="", flush=True)
 
 def showScore(hit):
     global SCORE
     if hit:
-        SCORE = SCORE + 10
+        SCORE = SCORE + 1
     else:
-        SCORE = SCORE - 5
+        SCORE = SCORE - 2
 
     if SCORE < 0:
         SCORE = 0
+    if SCORE > 22000000000000:
+        print("HACKER")
 
     print(str(SCORE))
 
 if __name__ == '__main__':
-    try: 
+    try:
+        
+        print("Waiting for input...", end="", flush=True)
         while RUN:
             GPIO.output(LASER,False)
             #print(TOGGLE)
             if GPIO.input(KNOP):
-                print("Button Pressed")
+                print("[Button Pressed]")
                 TOGGLE = True
                 time.sleep(3)
             if TOGGLE:
@@ -69,11 +74,11 @@ if __name__ == '__main__':
             #print(START)
             
             while START:
-                print("inGame")
+                #print("[inGame]")
                 
                 
                 if GPIO.input(KNOP):
-                    print("Button Pressed")
+                    print("[Button Pressed]")
                     TOGGLE = False
                     time.sleep(3)
                 #elif GPIO.input(ECHO1) == 1:
@@ -89,6 +94,7 @@ if __name__ == '__main__':
                 #print(START)
                 
             time.sleep(1)
+            print("." , end="", flush=True)
      
     # Reset by pressing CTRL + C
     except KeyboardInterrupt:

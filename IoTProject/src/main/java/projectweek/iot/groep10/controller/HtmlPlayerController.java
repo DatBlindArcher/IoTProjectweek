@@ -11,4 +11,10 @@ public class HtmlPlayerController {
     {
         return "index";
     }
+
+    @GetMapping("/test")
+    public String test()
+    {
+        return "test";
+    }
 }
