@@ -27,4 +27,10 @@ public class HtmlPlayerController {
     {
         return "test";
     }
+
+    @GetMapping("/game")
+    public String game()
+    {
+        return "game";
+    }
 }

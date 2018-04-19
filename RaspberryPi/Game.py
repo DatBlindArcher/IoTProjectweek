@@ -1,19 +1,26 @@
 import RPi.GPIO as GPIO
 import time
 import requests
+import sys
 
 ECHO1 = 15
 KNOP = 8
 LASER = 10
+REDLIGHT = 12
+GREENLIGHT = 7
 RUN = True
 START = False
 TOGGLE = False
+AKTIF = False
 SCORE = 0
+BUFFER = 0
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(ECHO1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(KNOP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(LASER,GPIO.OUT)
+GPIO.setup(REDLIGHT, GPIO.OUT)
+GPIO.setup(GREENLIGHT, GPIO.OUT)
 
 def stop():
     print("[Stop]")
@@ -25,6 +32,9 @@ def endGame():
     print("[endGame]")
     global START
     global SCORE
+    global BUFFER
+    global AKTIF
+    AKTIF = False
     START = False
 
     #Send SCORE To robbe his Server
@@ -34,21 +44,31 @@ def endGame():
     response = requests.post('http://193.191.176.129:8080/setplayer', json = player)
     print(response.json())
     SCORE = 0
+    BUFFER = 0
     print("Waiting for input...", end="", flush=True)
 
 def showScore(hit):
     global SCORE
+    global AKTIF
     if hit:
-        SCORE = SCORE + 1
+        GPIO.output(GREENLIGHT, True)
+        GPIO.output(REDLIGHT, False)
+        SCORE = SCORE + 2
+        AKTIF = True
     else:
-        SCORE = SCORE - 2
+        GPIO.output(GREENLIGHT, False)
+        GPIO.output(REDLIGHT, True)
+        AKTIF = False
+        #SCORE = SCORE - 0.5
 
     if SCORE < 0:
         SCORE = 0
-    if SCORE > 22000000000000:
-        print("HACKER")
+    #if SCORE > 22000000000000:
+        #print("HACKER")
 
-    print(str(SCORE))
+    sys.stdout.write("\rScore: " + str(SCORE)) 
+
+    #print(str(SCORE))
 
 if __name__ == '__main__':
     try:
@@ -56,6 +76,8 @@ if __name__ == '__main__':
         print("Waiting for input...", end="", flush=True)
         while RUN:
             GPIO.output(LASER,False)
+            GPIO.output(GREENLIGHT, False)
+            GPIO.output(REDLIGHT, False)
             #print(TOGGLE)
             if GPIO.input(KNOP):
                 print("[Button Pressed]")
@@ -64,18 +86,22 @@ if __name__ == '__main__':
             if TOGGLE:
                 START = True
                 GPIO.output(LASER,True)
-                
-                print("3")   
-                time.sleep(1)
-                print("2")   
-                time.sleep(1)
-                print("1")   
-                time.sleep(1)
+                GPIO.output(GREENLIGHT, False)
+                GPIO.output(REDLIGHT, True)
+                #hier stond cursor
+
+                for countdown in range(5, 0, -1):
+                    sys.stdout.write("\rStart in: " + str(countdown))   
+                    time.sleep(1)
+
+                sys.stdout.write("\rGo!                                 \n")
             #print(START)
             
             while START:
                 #print("[inGame]")
                 
+                if BUFFER > 100:
+                    TOGGLE = False
                 
                 if GPIO.input(KNOP):
                     print("[Button Pressed]")
@@ -91,6 +117,11 @@ if __name__ == '__main__':
                     #START = False
                     endGame()
                 time.sleep(0.1)
+                if not AKTIF:
+                    BUFFER += 1
+                else:
+                    BUFFER = 0
+
                 #print(START)
                 
             time.sleep(1)
