@@ -18,6 +18,9 @@ public class PlayerMemoryDb {
                 return (int)(b.getScore() - a.getScore());
             }
         };
+
+        createPlayer();
+        createPlayer();
     }
 
     public Player createPlayer() {
