@@ -24,7 +24,7 @@ public class PlayerMemoryDb {
     }
 
     public Player createPlayer() {
-        players.put(++counter, new Player(counter));
+        players.put(++counter, new Player(counter, "Player " + counter, 0));
         return players.get(counter);
     }
 

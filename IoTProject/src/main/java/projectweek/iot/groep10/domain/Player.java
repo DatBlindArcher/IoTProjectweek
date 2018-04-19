@@ -6,10 +6,10 @@ public class Player {
     private double score;
 
     public Player() { }
-    public Player(int id) {
+    public Player(int id, String name, int score) {
         this.id = id;
-        this.name = "Player " + id;
-        this.score = 0;
+        this.name = name;
+        this.score = score;
     }
 
     public int getId() {

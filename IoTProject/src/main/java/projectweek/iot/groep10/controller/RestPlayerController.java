@@ -10,8 +10,12 @@ import java.util.List;
 @RestController
 public class RestPlayerController
 {
-    @Autowired
     private PlayerService service;
+
+    @Autowired
+    public RestPlayerController(PlayerService service) {
+        this.service = service;
+    }
 
     @GetMapping("/leaderboard")
     public Player[] getLeaderboard()

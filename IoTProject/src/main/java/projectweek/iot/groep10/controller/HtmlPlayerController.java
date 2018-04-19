@@ -9,15 +9,22 @@ import projectweek.iot.groep10.services.PlayerService;
 @Controller
 public class HtmlPlayerController {
 
+    private PlayerService service;
+
+    @Autowired
+    public HtmlPlayerController(PlayerService service) {
+        this.service = service;
+    }
+
     @GetMapping("/")
     public ModelAndView index()
     {
         return new ModelAndView("index", "players", service.playerDb.getLeaderBoard());
     }
 
-
-    @Autowired
-    private PlayerService service;
-
-
+    @GetMapping("/test")
+    public String test()
+    {
+        return "test";
+    }
 }
