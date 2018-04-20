@@ -29,6 +29,7 @@ public class PlayerMemoryDb {
     }
 
     public Player setPlayer(Player player) {
+        if (!players.containsKey(player.getId())) return null;
         players.get(player.getId()).setName(player.getName());
         players.get(player.getId()).setScore(player.getScore());
         return players.get(player.getId());
